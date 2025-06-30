@@ -18,6 +18,7 @@ namespace BusinessLayer.ValidationRules.FluentValidation
 
             RuleFor(u => u.UserName).NotEmpty();
 
+
             RuleFor(u => u.Email).NotEmpty();
         }
     }

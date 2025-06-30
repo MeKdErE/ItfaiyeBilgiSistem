@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
             } 
             return BadRequest(result);
         }
-        [HttpGet("get")]
+        [HttpGet("getbyid")]
         public IActionResult Get(int id )
         {
             var result = _operationClaimService.GetByID(id);
