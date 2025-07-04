@@ -1,9 +1,20 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
+using BusinessLayer.DependencyResolvers.Autofac;
 using DataAccessLayer.Abstract.Repositories;
 using DataAccessLayer.Concrete.NpgsqlEntityFamework;
 
 var builder = WebApplication.CreateBuilder(args);
+//Autofac IOC Container için 
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+{
+    builder.RegisterModule(new AutofacBusinessModule());
+});
+
 
 // Add services to the container.
 

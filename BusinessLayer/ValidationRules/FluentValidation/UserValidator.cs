@@ -13,13 +13,19 @@ namespace BusinessLayer.ValidationRules.FluentValidation
         public UserValidator()
         {
             RuleFor(u => u.FirstName).NotEmpty();
-
+            RuleFor(u => u.FirstName).MinimumLength(3);
             RuleFor(u => u.LastName).NotEmpty();
-
+            RuleFor(u => u.LastName).MinimumLength(3);
             RuleFor(u => u.UserName).NotEmpty();
-
-
+            RuleFor(u => u.UserName).MinimumLength(3);
+            RuleFor(u => u.UserName).Must(StartWithA);
             RuleFor(u => u.Email).NotEmpty();
+        }
+
+        private bool StartWithA(string arg)
+        {
+            return arg.StartsWith("A");
         }
     }
 }
+ 

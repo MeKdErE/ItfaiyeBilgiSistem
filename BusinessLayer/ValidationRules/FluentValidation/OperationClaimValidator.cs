@@ -14,6 +14,12 @@ namespace BusinessLayer.ValidationRules.FluentValidation
         {
             RuleFor(oc => oc.Name).NotEmpty();
             RuleFor(oc => oc.Name).MinimumLength(3);
+            RuleFor(oc => oc.Name).Must(StartWithA).WithMessage("Yetkiler A Harfi ile Başlamalı. ");
+        }
+
+        private bool StartWithA(string arg)
+        {
+            return arg.StartsWith("A");
         }
     }
 }
