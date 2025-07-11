@@ -29,6 +29,8 @@ namespace BusinessLayer.Constants
         public static string OperationClaimGetByNameError = "İsme Göre Yetki Arama İşlemi Başarısız!!";
         public static string OperationClaimGetByIdSuccess = "ID'ye Göre Yetki Arama İşlemi Başarılı.";
         public static string OperationClaimGetByIdError = "ID'ye Göre Yetki Arama İşlemi Başarısız!!";
+        public static string CountOfOperationCliamsError = "En fazla 5 Yetkilendirme olur.";
+        public static string OperationClaimNameAlreadyExists = "Aynı İsimde Yetki Mevcut";
 
         //Kullanıcı Yetki Atama Mesajları
     }

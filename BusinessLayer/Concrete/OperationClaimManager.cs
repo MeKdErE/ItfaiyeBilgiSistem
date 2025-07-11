@@ -30,8 +30,17 @@ namespace BusinessLayer.Concrete
         [ValidationAspect(typeof(OperationClaimValidator))]
         public IResult Add(OperationClaim operationClaim)
         {
-            _operationClaimDal.Add(operationClaim);
-            return new SuccessResult(Messages.OperationClaimAddSuccess);
+            if (CheckIfCountOfOperationClaim().Success)
+            {
+                if (CheckIfOperationClaimNameExists(operationClaim.Name).Success)
+                {
+                    _operationClaimDal.Add(operationClaim);
+                    return new SuccessResult(Messages.OperationClaimAddSuccess);
+                }
+                return new ErrorResult(Messages.OperationClaimNameAlreadyExists);
+            }
+                return new ErrorResult(Messages.OperationClaimAddError);
+            
         }
 
         public IResult Delete(int Id)
@@ -64,5 +73,26 @@ namespace BusinessLayer.Concrete
         {
             throw new NotImplementedException();
         }
+
+        private IResult CheckIfCountOfOperationClaim() 
+        {
+            var result = _operationClaimDal.GetAll().Count;
+            if (result >= 7)
+            {
+                return new ErrorResult(Messages.CountOfOperationCliamsError);
+            }
+            return new SuccessResult();
+        }
+        private IResult CheckIfOperationClaimNameExists(string name)
+        {
+            var result = _operationClaimDal.GetAll(oc => oc.Name == name).Any();
+            if (result)
+            {
+                return new ErrorResult(Messages.OperationClaimNameAlreadyExists);
+            }
+            return new SuccessResult();
+        }
+
+
     }
 }
