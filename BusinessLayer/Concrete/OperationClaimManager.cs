@@ -4,6 +4,7 @@ using BusinessLayer.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Entities.Concrete;
+using Core.Utilities.BusinessRules;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccessLayer.Abstract.Repositories;
@@ -30,17 +31,16 @@ namespace BusinessLayer.Concrete
         [ValidationAspect(typeof(OperationClaimValidator))]
         public IResult Add(OperationClaim operationClaim)
         {
-            if (CheckIfCountOfOperationClaim().Success)
+            IResult result = BusinessRules.Run(
+                CheckIfOperationClaimNameExists(operationClaim.Name),
+                CheckIfCountOfOperationClaim()
+                );
+            if ( result != null ) 
             {
-                if (CheckIfOperationClaimNameExists(operationClaim.Name).Success)
-                {
-                    _operationClaimDal.Add(operationClaim);
-                    return new SuccessResult(Messages.OperationClaimAddSuccess);
-                }
-                return new ErrorResult(Messages.OperationClaimNameAlreadyExists);
+                return result;
             }
-                return new ErrorResult(Messages.OperationClaimAddError);
-            
+            _operationClaimDal.Add(operationClaim);
+            return new SuccessResult(Messages.OperationClaimAddSuccess);
         }
 
         public IResult Delete(int Id)
@@ -83,9 +83,9 @@ namespace BusinessLayer.Concrete
             }
             return new SuccessResult();
         }
-        private IResult CheckIfOperationClaimNameExists(string name)
+        private IResult CheckIfOperationClaimNameExists(string claimName)
         {
-            var result = _operationClaimDal.GetAll(oc => oc.Name == name).Any();
+            var result = _operationClaimDal.GetAll(oc => oc.Name == claimName).Any();
             if (result)
             {
                 return new ErrorResult(Messages.OperationClaimNameAlreadyExists);
