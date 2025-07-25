@@ -10,17 +10,18 @@ namespace Core.Utilities.BusinessRules
 {
     public class BusinessRules
     {
-        public static IResult Run (params IResult[] logics)           
-        {            
+        public static List<IResult> Run (params IResult[] logics)           
+        {         
+            List<IResult> errorResults = new List<IResult>();
             foreach (var logic in logics) 
             {
                 if (!logic.Success) 
                 {
-                    return logic;
+                    errorResults.Add(logic);
                 }
                 
             }            
-            return null;
+            return errorResults;
         }
         
     }

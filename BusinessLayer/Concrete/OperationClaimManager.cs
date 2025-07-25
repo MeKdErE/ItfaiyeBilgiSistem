@@ -31,13 +31,13 @@ namespace BusinessLayer.Concrete
         [ValidationAspect(typeof(OperationClaimValidator))]
         public IResult Add(OperationClaim operationClaim)
         {
-            IResult result = BusinessRules.Run(
+           var results = BusinessRules.Run(
                 CheckIfOperationClaimNameExists(operationClaim.Name),
                 CheckIfCountOfOperationClaim()
                 );
-            if ( result != null ) 
+            if ( results.Count>0 ) 
             {
-                return result;
+                return results.;
             }
             _operationClaimDal.Add(operationClaim);
             return new SuccessResult(Messages.OperationClaimAddSuccess);
@@ -77,7 +77,7 @@ namespace BusinessLayer.Concrete
         private IResult CheckIfCountOfOperationClaim() 
         {
             var result = _operationClaimDal.GetAll().Count;
-            if (result >= 7)
+            if (result >= 3)
             {
                 return new ErrorResult(Messages.CountOfOperationCliamsError);
             }
